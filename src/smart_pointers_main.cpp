@@ -59,7 +59,7 @@ int main() {
   size_t sec_num = {1};
 
   // 1. RAW vs SMART POINTER
-  std::cout << "==>   " << sec_num++ << " RAW vs SMART POINTER:" << std::endl;
+  std::cout << sec_num++ << ". RAW vs SMART POINTER:" << std::endl;
   A *obj_a = new A("Andrzej");
   std::unique_ptr<A> obj_b(new A("Jack"));
 
@@ -68,10 +68,15 @@ int main() {
   std::unique_ptr<A> obj_b_copy = obj_b;
 #endif
 
+  // These two should be identical.
+  std::cout << "\n(should be identical)\n";
+  std::cout << "Size of raw pointer: " << sizeof obj_a << std::endl;
+  std::cout << "Size of unique_ptr: " << sizeof obj_b << std::endl;
+
   delete obj_a;
 
   // 2. SHARED_PTR vs WEAK_PTR
-  std::cout << "==>   " << sec_num++ << " SHARED_PTR vs WEAK_PTR:" << std::endl;
+  std::cout << std::endl << sec_num++ << ". SHARED_PTR vs WEAK_PTR:" << std::endl;
   std::shared_ptr<A> obj_c(new A("David"));
   std::shared_ptr<A> obj_c_copy(obj_c);
 
@@ -80,8 +85,13 @@ int main() {
   std::weak_ptr<A> obj_c_weak_ptr(obj_c);
   std::cout << "Use count for David: " << obj_c.use_count() << std::endl;
 
+  // These two should be identical.
+  std::cout << "\n(should be smaller than unique and raw pointers)\n";
+  std::cout << "Size of shared pointer: " << sizeof obj_c << std::endl;
+  std::cout << "Size of weak pointer: " << sizeof obj_c_weak_ptr << std::endl;
+
   // 3. CIRCULAR DEPENDENCY
-  std::cout << "==>   " << sec_num++ << " CIRCULAR DEPENDENCY" << std::endl;
+  std::cout << std::endl << sec_num++ << ". CIRCULAR DEPENDENCY" << std::endl;
   std::shared_ptr<Player> andrzej(new Player());
   std::shared_ptr<Player> jack(new Player());
 
@@ -89,7 +99,7 @@ int main() {
   andrzej->partner = jack;
 
   // 4. MAKE_UNIQUE AND MAKE_SHARED
-  std::cout << "==>   " << sec_num++ << " STD::MAKE_UNIQUE" << std::endl;
+  std::cout << std::endl << sec_num++ << ". STD::MAKE_UNIQUE" << std::endl;
 #if __cplusplus >= 201403L
   std::unique_ptr<Player> warzynski = std::make_unique<Player>();
 #endif
